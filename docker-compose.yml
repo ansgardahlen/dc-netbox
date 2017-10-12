@@ -13,6 +13,26 @@ services:
       volumes:
         - ./data/netbox/nginx-config:/etc/netbox-nginx/:rw
         - ./data/netbox/static-files:/opt/netbox/netbox/static:rw
+      #env_file: .env
+      environment:
+        - DB_NAME=${DB_NAME}
+        - DB_USER=${DB_USER}
+        - DB_PASSWORD=${DB_PASSWORD}
+        - DB_HOST=${DB_HOST}
+        - SUPERUSER_NAME=${SUPERUSER_NAME}
+        - SUPERUSER_EMAIL=${SUPERUSER_EMAIL}
+        - SUPERUSER_PASSWORD=${SUPERUSER_PASSWORD}
+        - NETBOX_USERNAME=${NETBOX_USERNAME}
+        - NETBOX_PASSWORD=${NETBOX_PASSWORD}
+        - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+        - SECRET_KEY=${SECRET_KEY}
+        - EMAIL_SERVER=${EMAIL_SERVER}
+        - EMAIL_PORT=${EMAIL_PORT}
+        - EMAIL_USERNAME=${EMAIL_USERNAME}
+        - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+        - EMAIL_TIMEOUT=${EMAIL_TIMEOUT}
+        - EMAIL_FROM=${EMAIL_FROM}
+        - LOGIN_REQUIRED=${LOGIN_REQUIRED}
 
     nginx:
       image: nginx:1.11-alpine
