@@ -12,12 +12,12 @@ if [[ -f netbox.conf ]]; then
   esac
 fi
 
-if [ -z "$NETBOX_HOSTNAME" ]; then
-  read -p "Hostname (FQDN): " -ei "netbox.example.org" NETBOX_HOSTNAME
+if [ -z "$PUBLIC_FQDN" ]; then
+  read -p "Hostname (FQDN): " -ei "netbox.example.org" PUBLIC_FQDN
 fi
 
-if [ -z "$NETBOX_ADMIN_MAIL" ]; then
-  read -p "Netbox admin Mail address: " -ei "mail@example.com" NETBOX_ADMIN_MAIL
+if [ -z "$ADMIN_MAIL" ]; then
+  read -p "Netbox admin Mail address: " -ei "mail@example.com" ADMIN_MAIL
 fi
 
 [[ -f /etc/timezone ]] && TZ=$(cat /etc/timezone)
@@ -30,13 +30,13 @@ cat << EOF > netbox.conf
 # netbox web ui configuration
 # ------------------------------
 # example.org is _not_ a valid hostname, use a fqdn here.
-NETBOX_HOSTNAME=${NETBOX_HOSTNAME}
+PUBLIC_FQDN=${PUBLIC_FQDN}
 
 # ------------------------------
 # NETBOX admin user
 # ------------------------------
 SUPERUSER_NAME=netboxadmin
-SUPERUSER_EMAIL=${NETBOX_ADMIN_MAIL}
+ADMIN_MAIL=${ADMIN_MAIL}
 SUPERUSER_PASSWORD=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 NETBOX_USERNAME=netboxguest
 NETBOX_PASSWORD=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)

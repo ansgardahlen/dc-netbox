@@ -20,7 +20,7 @@ services:
         - DB_PASSWORD=${DB_PASSWORD}
         - DB_HOST=${DB_HOST}
         - SUPERUSER_NAME=${SUPERUSER_NAME}
-        - SUPERUSER_EMAIL=${SUPERUSER_EMAIL}
+        - SUPERUSER_EMAIL=${ADMIN_MAIL}
         - SUPERUSER_PASSWORD=${SUPERUSER_PASSWORD}
         - NETBOX_USERNAME=${NETBOX_USERNAME}
         - NETBOX_PASSWORD=${NETBOX_PASSWORD}
@@ -46,9 +46,9 @@ services:
         - ./data/netbox/nginx-config:/etc/netbox-nginx/:rw
         - ./data/netbox/static-files:/opt/netbox/netbox/static:rw
       environment:
-        - VIRTUAL_HOST=${NETBOX_HOSTNAME}
+        - VIRTUAL_HOST=${PUBLIC_FQDN}
         - VIRTUAL_PORT=${HTTP_PORT:-80}
-        - LETSENCRYPT_HOST=${NETBOX_HOSTNAME}
+        - LETSENCRYPT_HOST=${PUBLIC_FQDN}
         - LETSENCRYPT_EMAIL=${SUPERUSER_EMAIL}
 
     postgres:
