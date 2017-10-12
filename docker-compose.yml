@@ -5,7 +5,7 @@ services:
         context: ./data/Dockerfiles/netbox/
         args:
           - BRANCH=${BRANCH-master}
-     restart: always
+      restart: always
       image: ninech/netbox:${BRANCH-latest}
       container_name: dc_netbox
       env_file: netbox.env
