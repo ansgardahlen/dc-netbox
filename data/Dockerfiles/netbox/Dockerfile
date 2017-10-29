@@ -16,6 +16,7 @@ RUN apk add --no-cache \
       wget
 
 RUN pip install gunicorn
+RUN pip install djangorestframework==3.6.4
 
 WORKDIR /opt
 
