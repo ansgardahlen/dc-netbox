@@ -66,6 +66,7 @@ TZ=${TZ}
 # Fixed project name
 #COMPOSE_PROJECT_NAME=netbox
 
+BRANCH-master=master
 ALLOWED_HOSTS=*
 SECRET_KEY=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 EMAIL_SERVER=localhost
