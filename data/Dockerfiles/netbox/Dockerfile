@@ -35,12 +35,12 @@ WORKDIR /opt/netbox
 RUN pip install -r requirements.txt
 
 COPY docker/configuration.docker.py /opt/netbox/netbox/netbox/configuration.py
-COPY ../../netbox/configuration/gunicorn_config.py /etc/netbox/config/
+COPY configuration/gunicorn_config.py /etc/netbox/config/
 COPY docker/nginx.conf /etc/netbox-nginx/nginx.conf
 COPY docker/docker-entrypoint.sh docker-entrypoint.sh
-COPY ../../netbox/startup_scripts/ /opt/netbox/startup_scripts/
-COPY ../../netbox/initializers/ /opt/netbox/initializers/
-COPY ../../netbox/configuration/configuration.py /etc/netbox/config/configuration.py
+COPY startup_scripts/ /opt/netbox/startup_scripts/
+COPY initializers/ /opt/netbox/initializers/
+COPY configuration/configuration.py /etc/netbox/config/configuration.py
 
 WORKDIR /opt/netbox/netbox
 

@@ -12,9 +12,9 @@ services:
       depends_on:
         - postgres
       volumes:
-        - ./data/netbox/startup_scripts:/opt/netbox/startup_scripts:ro
-        - ./data/netbox/initializers:/opt/netbox/initializers:ro
-        - ./data/netbox/configuration:/etc/netbox/config:ro
+        - ./data/Dockerfiles/netbox/startup_scripts:/opt/netbox/startup_scripts:ro
+        - ./data/Dockerfiles/netbox/initializers:/opt/netbox/initializers:ro
+        - ./data/Dockerfiles/netbox/configuration:/etc/netbox/config:ro
         - ./data/netbox/nginx-config:/etc/netbox-nginx/
         - ./data/netbox/static-files:/opt/netbox/netbox/static
         - ./data/netbox/media-files:/opt/netbox/netbox/media
