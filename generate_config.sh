@@ -57,7 +57,7 @@ DBROOT=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 # ------------------------------
 
 # You should use HTTPS, but in case of SSL offloaded reverse proxies:
-HTTP_PORT=80
+HTTP_PORT=8080
 HTTP_BIND=0.0.0.0
 
 # Your timezone
@@ -79,54 +79,3 @@ LOGIN_REQUIRED=True
 EOF
 
 
-mkdir -p ./data/netbox/nginx-config
-
-if [[ -f ./data/netbox/nginx-config/nginx.conf ]]; then
-  read -r -p "config file nginx.conf exists and will be overwritten, are you sure you want to contine? [y/N] " response
-  case $response in
-    [yY][eE][sS]|[yY])
-      mv ./data/netbox/nginx-config/nginx.conf ./data/netbox/nginx-config/nginx.conf_backup
-      ;;
-    *)
-      exit 1
-    ;;
-  esac
-fi
-
-cat << EOF > ./data/netbox/nginx-config/nginx.conf
-worker_processes 1;
-
-events {
-    worker_connections  1024;
-}
-
-http {
-    include       /etc/nginx/mime.types;
-    default_type  application/octet-stream;
-    sendfile        on;
-    tcp_nopush     on;
-    keepalive_timeout  65;
-    gzip  on;
-    server_tokens off;
-
-    server {
-        listen 80;
-
-        server_name localhost;
-
-        access_log off;
-
-        location /static/ {
-            alias /opt/netbox/netbox/static/;
-        }
-
-        location / {
-            proxy_pass http://netbox:8001;
-            proxy_set_header X-Forwarded-Host \$http_host;
-            proxy_set_header X-Real-IP \$remote_addr;
-            proxy_set_header X-Forwarded-Proto \$scheme;
-            add_header P3P 'CP="ALL DSP COR PSAa PSDa OUR NOR ONL UNI COM NAV"';
-        }
-    }
-}
-EOF

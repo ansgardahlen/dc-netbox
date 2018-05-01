@@ -12,8 +12,13 @@ services:
       depends_on:
         - postgres
       volumes:
-        - ./data/netbox/nginx-config:/etc/netbox-nginx/:rw
-        - ./data/netbox/static-files:/opt/netbox/netbox/static:rw
+        - ./data/netbox/startup_scripts:/opt/netbox/startup_scripts:ro
+        - ./data/netbox/initializers:/opt/netbox/initializers:ro
+        - ./data/netbox/configuration:/etc/netbox/config:ro
+        - ./data/netbox/nginx-config:/etc/netbox-nginx/
+        - ./data/netbox/static-files:/opt/netbox/netbox/static
+        - ./data/netbox/media-files:/opt/netbox/netbox/media
+        - ./data/netbox/report-files:/etc/netbox/reports:ro
 #      ports:
 #        - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8001}:${HTTP_PORT:-8001}"
       environment:
@@ -43,13 +48,13 @@ services:
       depends_on:
           - netbox
 #      ports:
-#        - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-80}:${HTTP_PORT:-80}"
+#        - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8080}:${HTTP_PORT:-8080}"
       volumes:
         - ./data/netbox/nginx-config:/etc/netbox-nginx/:rw
         - ./data/netbox/static-files:/opt/netbox/netbox/static:rw
       environment:
         - VIRTUAL_HOST=${PUBLIC_FQDN}
-        - VIRTUAL_PORT=${HTTP_PORT:-80}
+        - VIRTUAL_PORT=${HTTP_PORT:-8080}
         - LETSENCRYPT_HOST=${PUBLIC_FQDN}
         - LETSENCRYPT_EMAIL=${SUPERUSER_EMAIL}
 
