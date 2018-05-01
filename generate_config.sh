@@ -38,6 +38,7 @@ PUBLIC_FQDN=${PUBLIC_FQDN}
 SUPERUSER_NAME=netboxadmin
 SUPERUSER_EMAIL=${ADMIN_MAIL}
 SUPERUSER_PASSWORD=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
+SUPERUSER_API_TOKEN=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 NETBOX_USERNAME=netboxguest
 NETBOX_PASSWORD=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 
@@ -76,6 +77,11 @@ EMAIL_PASSWORD=bar
 EMAIL_TIMEOUT=10
 EMAIL_FROM=netbox@bar.com
 LOGIN_REQUIRED=True
+MEDIA_ROOT=/opt/netbox/netbox/media
+NAPALM_USERNAME=
+NAPALM_PASSWORD=
+NAPALM_TIMEOUT=10
+MAX_PAGE_SIZE=0
 EOF
 
 
