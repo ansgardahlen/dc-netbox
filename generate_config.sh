@@ -36,7 +36,7 @@ PUBLIC_FQDN=${PUBLIC_FQDN}
 # NETBOX admin user
 # ------------------------------
 SUPERUSER_NAME=netboxadmin
-SUPERUSER_EMAIL=${ADMIN_MAIL}
+SUPERUSER_EMAIL=${SUPERUSER_EMAIL}
 SUPERUSER_PASSWORD=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 SUPERUSER_API_TOKEN=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 NETBOX_USERNAME=netboxguest
