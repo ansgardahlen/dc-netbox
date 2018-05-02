@@ -3,31 +3,15 @@ services:
 
     netbox:
       build:
-        context: ./data/Dockerfiles/netbox/
-        args:
-          - BRANCH=${BRANCH-master}
-      restart: always
+        dockerfile: Dockerfile.ldap
       image: ninech/netbox:${BRANCH-latest}
-      container_name: dc_netbox
-      depends_on:
-        - postgres
-      volumes:
-        - ./data/Dockerfiles/netbox/startup_scripts:/opt/netbox/startup_scripts:ro
-        - ./data/Dockerfiles/netbox/initializers:/opt/netbox/initializers:ro
-        - ./data/Dockerfiles/netbox/configuration:/etc/netbox/config:ro
-        - ./data/netbox/nginx-config:/etc/netbox-nginx/
-        - ./data/netbox/static-files:/opt/netbox/netbox/static
-        - ./data/netbox/media-files:/opt/netbox/netbox/media
-        - ./data/netbox/report-files:/etc/netbox/reports:ro
-#      ports:
-#        - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8001}:${HTTP_PORT:-8001}"
       environment:
         - DB_NAME=${DB_NAME}
         - DB_USER=${DB_USER}
         - DB_PASSWORD=${DB_PASSWORD}
         - DB_HOST=${DB_HOST}
         - SUPERUSER_NAME=${SUPERUSER_NAME}
-        - SUPERUSER_EMAIL=${ADMIN_MAIL}
+        - SUPERUSER_EMAIL=${SUPERUSER_EMAIL}
         - SUPERUSER_PASSWORD=${SUPERUSER_PASSWORD}
         - NETBOX_USERNAME=${NETBOX_USERNAME}
         - NETBOX_PASSWORD=${NETBOX_PASSWORD}
@@ -40,10 +24,10 @@ services:
         - EMAIL_TIMEOUT=${EMAIL_TIMEOUT}
         - EMAIL_FROM=${EMAIL_FROM}
         - LOGIN_REQUIRED=${LOGIN_REQUIRED}
+        - MEDIA_ROOT=${MEDIA_ROOT}
         - BANNER_TOP=${BANNER_TOP}
         - BANNER_BOTTOM=${BANNER_BOTTOM}
         - BANNER_LOGIN=${BANNER_LOGIN}
-        - MEDIA_ROOT=${MEDIA_ROOT}
         - NAPALM_USERNAME=${NAPALM_USERNAME}
         - NAPALM_PASSWORD=${NAPALM_PASSWORD}
         - NAPALM_TIMEOUT=${NAPALM_TIMEOUT}
@@ -61,31 +45,4 @@ services:
         - AUTH_LDAP_CACHE_GROUPS=${AUTH_LDAP_CACHE_GROUPS}
         - DEBUG=${DEBUG}
         - MAINTENANCE_MODE=${MAINTENANCE_MODE}
-
-    nginx:
-      image: nginx:1.11-alpine
-      container_name: dc_netbox_nginx
-      command: nginx -g 'daemon off;' -c /etc/netbox-nginx/nginx.conf
-      depends_on:
-          - netbox
-#      ports:
-#        - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8080}:${HTTP_PORT:-8080}"
-      volumes:
-        - ./data/netbox/nginx-config:/etc/netbox-nginx/:rw
-        - ./data/netbox/static-files:/opt/netbox/netbox/static:rw
-      environment:
-        - VIRTUAL_HOST=${PUBLIC_FQDN}
-        - VIRTUAL_PORT=${HTTP_PORT:-8080}
-        - LETSENCRYPT_HOST=${PUBLIC_FQDN}
-        - LETSENCRYPT_EMAIL=${SUPERUSER_EMAIL}
-
-    postgres:
-      image: postgres:9.6-alpine
-      container_name: dc_netbox_pg
-      environment:
-        - POSTGRES_USER=${DB_USER}
-        - POSTGRES_PASSWORD=${DB_PASSWORD}
-        - POSTGRES_DB=${DB_NAME}
-      volumes:
-        - ./data/postgres/:/var/lib/postgresql/data:rw
 

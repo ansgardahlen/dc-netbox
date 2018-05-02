@@ -58,7 +58,7 @@ DBROOT=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 # ------------------------------
 
 # You should use HTTPS, but in case of SSL offloaded reverse proxies:
-HTTP_PORT=8080
+HTTP_PORT=80
 HTTP_BIND=0.0.0.0
 
 # Your timezone
@@ -78,10 +78,47 @@ EMAIL_TIMEOUT=10
 EMAIL_FROM=netbox@bar.com
 LOGIN_REQUIRED=True
 MEDIA_ROOT=/opt/netbox/netbox/media
+#BANNER_TOP=
+#BANNER_BOTTOM=
+#BANNER_LOGIN=
 NAPALM_USERNAME=
 NAPALM_PASSWORD=
 NAPALM_TIMEOUT=10
 MAX_PAGE_SIZE=0
+#DEBUG=TRUE
+#MAINTENANCE_MODE=TRUE
+
+#####################
+# LDAP
+#####################
+AUTH_LDAP_SERVER_URI=ldap://darz.local
+AUTH_LDAP_BIND_DN=
+AUTH_LDAP_BIND_PASSWORD=
+LDAP_IGNORE_CERT_ERRORS=
+AUTH_LDAP_USER_SEARCH_BASEDN=
+AUTH_LDAP_GROUP_SEARCH_BASEDN=
+AUTH_LDAP_REQUIRE_GROUP_DN=
+AUTH_LDAP_IS_ADMIN_DN=
+AUTH_LDAP_IS_SUPERUSER_DN=
+##AUTH_LDAP_FIND_GROUP_PERMS=
+AUTH_LDAP_CACHE_GROUPS=
+##AUTH_LDAP_ATTR_FIRSTNAME=
+##AUTH_LDAP_ATTR_LASTNAME=
+##AUTH_LDAP_ATTR_MAIL=
+
 EOF
 
+mkdir -p ./data/netbox/nginx-config
 
+if [[ -f ./data/netbox/nginx-config/nginx.conf ]]; then
+  read -r -p "config file nginx.conf exists and will be overwritten, are you sure you want to contine? [y/N] " response
+  case $response in
+    [yY][eE][sS]|[yY])
+      mv ./data/netbox/nginx-config/nginx.conf ./data/netbox/nginx-config/nginx.conf_backup
+      ;;
+    *)
+      exit 1
+    ;;
+  esac
+fi
+cp ./data/Dockerfiles/netbox/docker/nginx.conf ./data/netbox/nginx-config/nginx.conf
