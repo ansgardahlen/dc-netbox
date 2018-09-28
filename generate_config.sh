@@ -20,6 +20,19 @@ if [ -z "$ADMIN_MAIL" ]; then
   read -p "Netbox admin Mail address: " -ei "mail@example.com" ADMIN_MAIL
 fi
 
+read -r -p "Do you want to authenticate against ldap? [y/N] " response
+case $response in
+  [yY][eE][sS]|[yY])
+    BRANCH=latest-ldap
+    ;;
+  [nN])
+    BRANCH=master
+    ;;
+  *)
+    exit 1
+  ;;
+esac
+
 [[ -f /etc/timezone ]] && TZ=$(cat /etc/timezone)
 if [ -z "$TZ" ]; then
   read -p "Timezone: " -ei "Europe/Berlin" TZ
@@ -38,6 +51,7 @@ PUBLIC_FQDN=${PUBLIC_FQDN}
 SUPERUSER_NAME=netboxadmin
 SUPERUSER_EMAIL=${ADMIN_MAIL}
 SUPERUSER_PASSWORD=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
+SUPERUSER_API_TOKEN=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 NETBOX_USERNAME=netboxguest
 NETBOX_PASSWORD=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 
@@ -66,7 +80,17 @@ TZ=${TZ}
 # Fixed project name
 #COMPOSE_PROJECT_NAME=netbox
 
-BRANCH-master=master
+BRANCH=$BRANCH
+#AUTH_LDAP_SERVER_URI=ldaps://<FQDN_1> ldaps://<FQDN_2> ldaps://<FQDN_2>
+#AUTH_LDAP_BIND_DN=<LDAP_CN_BIND_USER>
+#AUTH_LDAP_BIND_PASSWORD=<LDAP_BIND_PASS>
+#LDAP_IGNORE_CERT_ERRORS=True
+#AUTH_LDAP_USER_SEARCH_BASEDN=<SEARCH_BASE_DN>
+#AUTH_LDAP_GROUP_SEARCH_BASEDN=<SEARCH_GROUP_DN>
+#AUTH_LDAP_REQUIRE_GROUP_DN=<LDAP_NETBOX_USER_GROUP_CN>
+#AUTH_LDAP_IS_ADMIN_DN=<LDAP_NETBOX_ADMIN_GROUP_CN>
+#AUTH_LDAP_IS_SUPERUSER_DN=<LDAP_NETBOX_SUPERUSER_GROUP_CN>
+#AUTH_LDAP_CACHE_GROUPS=<CACHETIME_3600>
 ALLOWED_HOSTS=*
 SECRET_KEY=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 EMAIL_SERVER=localhost
@@ -76,6 +100,17 @@ EMAIL_PASSWORD=bar
 EMAIL_TIMEOUT=10
 EMAIL_FROM=netbox@bar.com
 LOGIN_REQUIRED=True
+MEDIA_ROOT=/opt/netbox/netbox/media
+#BANNER_TOP=LDAP TEST
+#BANNER_BOTTOM=BANNER BOTTOM
+#BANNER_LOGIN=LDAP LOGIN TEST
+#NAPALM_USERNAME=
+#NAPALM_PASSWORD=
+#NAPALM_TIMEOUT=10
+MAX_PAGE_SIZE=0
+DEBUG=TRUE
+#MAINTENANCE_MODE=TRUE
+#REDIS_PASSWORD=
 EOF
 
 

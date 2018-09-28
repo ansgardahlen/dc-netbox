@@ -1,7 +1,4 @@
-daemon off;
 worker_processes 1;
-
-error_log /dev/stderr info;
 
 events {
     worker_connections 1024;
@@ -18,7 +15,8 @@ http {
     client_max_body_size 10M;
 
     server {
-        listen      8080;
+        listen      80;
+        server_name localhost;
         access_log  off;
 
         location /static/ {
