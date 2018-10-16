@@ -23,10 +23,10 @@ fi
 read -r -p "Do you want to authenticate against ldap? [y/N] " response
 case $response in
   [yY][eE][sS]|[yY])
-    BRANCH=latest-ldap
+    IMAGE_BRANCH=latest-ldap
     ;;
   [nN])
-    BRANCH=master
+    IMAGE_BRANCH=master
     ;;
   *)
     exit 1
@@ -80,7 +80,9 @@ TZ=${TZ}
 # Fixed project name
 #COMPOSE_PROJECT_NAME=netbox
 
-BRANCH=$BRANCH
+IMAGE_BRANCH=$IMAGE_BRANCH
+NETBOX_BRANCH=v2.4.4
+
 #AUTH_LDAP_SERVER_URI=ldaps://<FQDN_1> ldaps://<FQDN_2> ldaps://<FQDN_2>
 #AUTH_LDAP_BIND_DN=<LDAP_CN_BIND_USER>
 #AUTH_LDAP_BIND_PASSWORD=<LDAP_BIND_PASS>
