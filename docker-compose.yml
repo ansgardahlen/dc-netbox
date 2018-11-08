@@ -5,10 +5,9 @@ services:
       build:
         context: ./data/Dockerfiles/netbox/
         args:
-          #- BRANCH=${BRANCH-master}
-          BRANCH: ${NETBOX_BRANCH-master}
+          - BRANCH=${NETBOX_BRANCH-master}
       restart: always
-      image: ninech/netbox:${IMAGE_BRANCH-latest}
+#      image: ninech/netbox:${IMAGE_BRANCH-latest}
       container_name: dc_netbox
       depends_on:
         - postgres

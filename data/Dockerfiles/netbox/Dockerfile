@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3.6-alpine3.8
 
 RUN apk add --no-cache \
       bash \
@@ -6,14 +6,13 @@ RUN apk add --no-cache \
       ca-certificates \
       cyrus-sasl-dev \
       graphviz \
-      ttf-ubuntu-font-family \
       jpeg-dev \
       libffi-dev \
       libxml2-dev \
       libxslt-dev \
       openldap-dev \
-      openssl-dev \
       postgresql-dev \
+      ttf-ubuntu-font-family \
       wget
 
 RUN pip install \
@@ -22,14 +21,22 @@ RUN pip install \
 # napalm is used for gathering information from network devices
       napalm \
 # ruamel is used in startup_scripts
-      ruamel.yaml
+      ruamel.yaml \
+# pinning django to the version required by netbox
+# adding it here, to install the correct version of
+# django-rq
+      'Django>=1.11,<2.1' \
+# django-rq is used for webhooks
+      django-rq \
+#########################
+# Added for using ldap
+      django_auth_ldap
+#########################
 
 WORKDIR /opt
 
 ARG BRANCH=master
-ENV BRANCH=master
-ENV URL=https://github.com/digitalocean/netbox/archive/${BRANCH}.tar.gz
-
+ARG URL=https://github.com/digitalocean/netbox/archive/${BRANCH}.tar.gz
 RUN wget -q -O - "${URL}" | tar xz \
   && mv netbox* netbox
 
@@ -44,11 +51,15 @@ COPY startup_scripts/ /opt/netbox/startup_scripts/
 COPY initializers/ /opt/netbox/initializers/
 COPY configuration/configuration.py /etc/netbox/config/configuration.py
 
+#########################
+# Added for using ldap
+COPY docker/ldap_config.docker.py /opt/netbox/netbox/netbox/ldap_config.py
+COPY configuration/ldap_config.py /etc/netbox/config/ldap_config.py
+#########################
+
 WORKDIR /opt/netbox/netbox
 
 ENTRYPOINT [ "/opt/netbox/docker-entrypoint.sh" ]
-
-VOLUME ["/etc/netbox-nginx/"]
 
 CMD ["gunicorn", "-c /etc/netbox/config/gunicorn_config.py", "netbox.wsgi"]
 
