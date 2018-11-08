@@ -20,19 +20,6 @@ if [ -z "$ADMIN_MAIL" ]; then
   read -p "Netbox admin Mail address: " -ei "mail@example.com" ADMIN_MAIL
 fi
 
-read -r -p "Do you want to authenticate against ldap? [y/N] " response
-case $response in
-  [yY][eE][sS]|[yY])
-    IMAGE_BRANCH=latest-ldap
-    ;;
-  [nN])
-    IMAGE_BRANCH=master
-    ;;
-  *)
-    exit 1
-  ;;
-esac
-
 [[ -f /etc/timezone ]] && TZ=$(cat /etc/timezone)
 if [ -z "$TZ" ]; then
   read -p "Timezone: " -ei "Europe/Berlin" TZ
@@ -80,8 +67,8 @@ TZ=${TZ}
 # Fixed project name
 #COMPOSE_PROJECT_NAME=netbox
 
-IMAGE_BRANCH=$IMAGE_BRANCH
-NETBOX_BRANCH=v2.4.4
+#IMAGE_BRANCH=$IMAGE_BRANCH
+NETBOX_BRANCH=v2.4.7
 
 #AUTH_LDAP_SERVER_URI=ldaps://<FQDN_1> ldaps://<FQDN_2> ldaps://<FQDN_2>
 #AUTH_LDAP_BIND_DN=<LDAP_CN_BIND_USER>
