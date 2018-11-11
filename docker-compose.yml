@@ -19,6 +19,7 @@ services:
         - ./data/netbox/static-files:/opt/netbox/netbox/static
         - ./data/netbox/media-files:/opt/netbox/netbox/media
         - ./data/netbox/report-files:/etc/netbox/reports:ro
+        - ./data/netbox/initializers:/opt/netbox/initializer
 #        - /etc/pki/ca-trust/source/anchors/ca.darz.local.pem:/etc/ssl/certs/ca.darz.local.pem:ro
 #      ports:
 #        - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8001}:${HTTP_PORT:-8001}"
